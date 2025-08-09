@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Name Results</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    {% if names|length > 1 %}
+        <table style="margin: 2em;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                    <th>Condition</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for name in names %}
+                <tr>
+                    <td><a href="{{url_for('name_details', id=name.id)}}">{{name.name}}</a></td>
+                    <td>{{name.patient_phone}}</td>
+                    <td>{{name.age}}</td>
+                    <td>{{name.brought_in_with}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+</body>
+</html>

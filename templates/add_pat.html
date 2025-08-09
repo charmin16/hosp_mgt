@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Patient | Clinic Management</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .radio-group {
+            margin: 15px 0;
+        }
+        .radio-group label {
+            display: inline-block;
+            margin-right: 20px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .nav-links {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-links a {
+            color: #3498db;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover {
+            background-color: #f0f0f0;
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .search-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 500px;
+    }
+
+    .search-type {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 5px;
+    }
+
+    .search-type label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        font-weight: normal;
+        color: #2c3e50;
+    }
+
+    .search-input-group {
+        display: flex;
+        width: 100%;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+        font-size: 15px;
+    }
+
+    .search-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 0 15px;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .search-btn:hover {
+        background-color: #2980b9;
+    }
+
+    .search-icon {
+        font-size: 16px;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Patient</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-message {{ messages[0][0] }}">
+                    {{ messages[0][1] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('add_patient') }}">
+            <div class="form-group">
+                <label for="name">Patient Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="male" required> Male</label>
+                    <label><input type="radio" name="gender" value="female"> Female</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+
+            <div class="form-group">
+                <label for="blood">Blood Group</label>
+                <input type="text" id="blood" placeholder="O+, O-, A+, B+ etc" name="blood">
+            </div>
+
+            <div class="form-group">
+                <label for="patient">Primary Phone Number</label>
+                <input type="tel" id="patient" name="patient" placeholder="080XXXXXXXX" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nok">Next of Kin (Full Name)</label>
+                <input type="text" id="nok" name="nok" required>
+            </div>
+
+            <div class="form-group">
+                <label for="biw">Chief Compliant at Admission</label>
+                <textarea id="biw" name="biw" required placeholder="Describe the patient's condition when brought in"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="bid">Admission Date (Defaults to Today if left blank)</label>
+                <input type="date" id="bid" name="bid">
+            </div>
+
+            <button type="submit" class="btn">Save Patient Record</button>
+        </form>
+
+    </div>
+</body>
+</html>

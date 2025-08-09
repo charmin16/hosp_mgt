@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Dashboard | Prime Care</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --hospital-blue: #1a6fc9;
+            --hospital-teal: #00a3ad;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --light-gray: #f8f9fa;
+        }
+
+        body {
+            background-color: #f5f9ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, var(--hospital-blue) 0%, var(--hospital-teal) 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .user-badge {
+            background-color: #e3f2fd;
+            color: var(--hospital-blue);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .search-header {
+            background-color: #e3f2fd;
+            padding: 1.5rem;
+            border-bottom: 1px solid #d1e3f6;
+        }
+
+        .search-title {
+            color: var(--hospital-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-card {
+            border-left: 4px solid var(--hospital-blue);
+            transition: all 0.3s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-form .form-control {
+            border-right: 0;
+        }
+
+        .search-form .input-group-text {
+            background-color: white;
+            border-left: 0;
+        }
+
+        .btn-hospital {
+            background-color: var(--hospital-blue);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .btn-hospital:hover {
+            background-color: #0d5bba;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-card {
+                margin: 1rem;
+            }
+
+            .header-gradient {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show text-center m-3"
+                 style="max-width: 800px; margin-left: auto !important; margin-right: auto !important;">
+                {{ messages[0][1] }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container py-4">
+        <!-- Main Dashboard Card -->
+        <div class="dashboard-card">
+            <!-- Header -->
+            <div class="header-gradient">
+                <h2><i class="fas fa-hospital me-2"></i> Hospital Management</h2>
+                <div class="user-badge">
+                    <i class="fas fa-user-md me-2"></i> Dr. {{ doc }}
+                </div>
+            </div>
+
+            <!-- Search Header -->
+            <div class="search-header">
+                <h4 class="search-title">
+                    <i class="fas fa-arrow-circle-right"></i> Returning Patient Search
+                </h4>
+                <p class="mb-0 text-muted">Access existing patient records</p>
+            </div>
+
+            <!-- Body -->
+            <div class="p-4 p-md-5">
+                <!-- Search Forms -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-phone-alt me-2"></i> Phone Search</h5>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ url_for('search_phone') }}" method="post">
+                                    <div class="input-group search-form mb-3">
+                                        <input type="tel" name="phone" class="form-control"
+                                               placeholder="Patient Contact (Preferred)" required>
+                                        <span class="input-group-text bg-transparent">
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                    </div>
+                                    <button type="submit" class="btn btn-hospital w-100">
+                                        <i class="fas fa-search me-2"></i> Search
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-user me-2"></i> Name Search</h5>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ url_for('search_name') }}" method="post">
+                                    <div class="input-group search-form mb-3">
+                                        <input type="text" name="name" class="form-control"
+                                               placeholder="Patient full name" required>
+                                        <span class="input-group-text bg-transparent">
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                    </div>
+                                    <button type="submit" class="btn btn-hospital w-100">
+                                        <i class="fas fa-search me-2"></i> Search
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <a href="{{ url_for('add_patient') }}" class="card action-card h-100 text-decoration-none">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-plus fa-3x mb-3" style="color: var(--hospital-teal);"></i>
+                                <h5>Register New Patient</h5>
+                                <p class="text-muted">Create new patient records</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card action-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-sign-out-alt fa-3x mb-3" style="color: var(--danger-red);"></i>
+                                <h5>End Session</h5>
+                                <p class="text-muted">Securely logout from system</p>
+                                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger w-100">
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Patients</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    {% if visit %}
+       <h3>Medical Details for {{patient.name}}</h3>
+        <table>
+            <thead>
+                <tr>
+                    <td>Date</td>
+                    <td>Diagnosis</td>
+                    <td>Test/Procedures</td>
+                    <td>Treatment</td>
+                    <td>Attending Physician</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in visit %}
+                <tr>
+                    <td>{{item.date}}</td>
+                    <td>{{item.diagnosis}}</td>
+                    <td>{{item.test}}</td>
+                    <td>{{item.medication}}</td>
+                    <td>{{item.examining_doctor}}</td>
+                    <td>
+                        <a href="{{url_for('update', phone=patient.patient_phone)}}">Edit</a> |
+                        <a href="{{url_for('delete', phone=patient.patient_phone)}}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <br><br>
+    {% else %}
+    <h4>No Subsequent Visit Yet for {{patient.name}}</h4>
+    {% endif %}
+
+
+    <a href="{{url_for('log_visit', phone=patient.patient_phone)}}">Add Today's Records</a><br><br>
+    <a href="{{url_for('core_vitals', phone=patient.patient_phone)}}">View {{patient.name}} Profile</a><br><br>
+    <a href="{{url_for('add_patient')}}">Register New Patient</a><br><br>
+    <a href="{{url_for('home')}}">Home</a>
+
+
+</body>
+</html>

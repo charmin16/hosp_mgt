@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Added Successfully</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60; /* Success green */
+            --accent-color: #3498db; /* Search blue */
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .success-card {
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .success-icon {
+            font-size: 50px;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .search-card {
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .search-type {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .search-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .record-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .search-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Success Message Card -->
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Medical Record Successfully Added</h1>
+            <p>The new clinical encounter has been saved to {{ patient.name }}'s permanent medical record.</p>
+
+            <div class="record-summary">
+                <h3><i class="fas fa-file-medical"></i> Record Summary</h3>
+                <p><strong>Date:</strong> {{ visit.date }}</p>
+                <p><strong>Diagnosis:</strong> {{ visit.diagnosis }}</p>
+                <p><strong>Tests:</strong> {{ visit.tests }}</p>
+                <p><strong>Treatment:</strong> {{ visit.medication }}</p>
+                <p><strong>Next Appointment:</strong> {{ visit.next_appointment }}</p>
+                <p><strong>Logged by:</strong> {{ visit.attending_physician }} at {{ now }}</p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{{ url_for('log_visit', phone=patient.patient_phone) }}" class="btn btn-primary">
+                    <i class="fas fa-user-chart"></i> View Full History
+                </a>
+                <a href="{{ url_for('log_visit', phone=patient.patient_phone) }}" class="btn btn-outline">
+                    <i class="fas fa-plus"></i> Add Another Record
+                </a>
+            </div>
+        </div>
+
+        <!-- New Patient Search Card -->
+        <div class="search-card">
+            <div class="search-header">
+                <i class="fas fa-search" style="font-size: 24px;"></i>
+                <h2>Search Another Patient</h2>
+            </div>
+
+            <form method=POST action="{{ url_for('search_patient') }}">
+                <div class="search-type">
+                    <label>
+                        <input type="radio" name="search_type" value="phone" checked>
+                        By Phone
+                    </label>
+                    <label>
+                        <input type="radio" name="search_type" value="name">
+                        By Name
+                    </label>
+                </div>
+
+                <div class="search-form">
+                    <input type="text"
+                           name="query"
+                           class="search-input"
+                           placeholder="Enter patient phone (preferred!) or name "
+                           required>
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i> Search Patient
+                    </button>
+                </div>
+            </form>
+
+            <div class="action-buttons" style="margin-top: 15px;">
+                <a href="{{ url_for('home') }}" class="btn btn-outline">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </div>
+
+            <div class="logout-btn-container" style="margin-top: 15px; text-align: right;">
+                <a href="{{ url_for('logout') }}" class="btn btn-outline" style="color: #e74c3c; border-color: #e74c3c;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                 </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

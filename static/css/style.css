@@ -1,0 +1,93 @@
+/* style.css */
+
+body {
+    font-family: 'Segoe UI', sans-serif !important;
+    background-color: #f3e8ff !important;
+}
+
+.main{
+    font-size: 4em;
+    letter-spacing: 0.1em;
+    margin-bottom: 0;
+}
+
+.d1{
+    padding: 2em;
+    margin-bottom: 3.5em;
+}
+
+.d1 p{
+    letter-spacing: 0.2em;
+    font-size: 2em;
+    margin-top: 0;
+}
+
+.border-line {
+    border-left: 6px dashed red;
+    height: 100%;
+}
+
+.avatar-input {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    width: 40px; /* optional, depending on your image */
+}
+
+input::placeholder {
+     color: #ddd;
+    letter-spacing: 2px;
+    font-size: 1.2em;
+}
+
+#a {
+    margin-bottom: 2em;
+}
+
+#b {
+    margin-top: 0.8em;
+    margin-bottom: 1em;
+}
+
+.empty-state-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 2rem;
+    text-align: center;
+    max-width: 500px;
+    margin: 2rem auto;
+    border: 1px solid #e0e0e0;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+}
+
+.empty-state-card h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-card p {
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+}
+
+.cta-button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+    background: #2980b9;
+}
+
