@@ -32,6 +32,10 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/create_tables')
+def create_tables():
+    db.create_all()
+    return "✅ Tables created successfully!"
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
