@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Registration Confirmation | Clinic System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -57,6 +59,8 @@
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
+            justify-content: space-between;
+            align-items: center;
         }
         .action-links a {
             color: #3498db;
@@ -134,53 +138,83 @@
             font-size: 16px;
         }
 
-    /* Logout Button Styles */
-.logout-btn-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #e0e0e0;
-}
+        /* Medical Record Button Styles */
+        .medical-record-btn {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-.logout-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background-color: #fff;
-    color: #e74c3c;
-    border: 1px solid #e74c3c;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
+        .medical-record-btn:hover {
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
 
-.logout-btn:hover {
-    background-color: #e74c3c;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+        /* Logout Button Styles */
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: #fff;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
 
-.fa-sign-out-alt {
-    font-size: 1.1em;
-}
+        .logout-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .logout-btn-container {
-        justify-content: center;
-    }
+        /* Form container - initially hidden */
+        .form-cont {
+            display: none;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
 
-    .logout-btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
+        /* Button container */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 15px;
+        }
 
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .action-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .logout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .search-form-container {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -217,8 +251,13 @@
             </tbody>
         </table>
 
-        <div style="margin-top: 3em;" class="action-links">
-            <a href="{{url_for('add_patient')}}">➕ Register Another Patient</a>
+        <div class="action-links">
+            <div class="button-container">
+                <a href="{{url_for('add_patient')}}" style="margin-right: 15px;">➕ Register Another Patient</a>
+                <button class="medical-record-btn" id="medicalRecordBtn">
+                    <i class="fas fa-file-medical"></i> Add First Medical Record
+                </button>
+            </div>
 
             <form method="POST" action="{{ url_for('search_patient') }}" class="search-form-container">
                 <div class="search-type">
@@ -236,24 +275,76 @@
                     <input type="text"
                            name="query"
                            class="search-input"
-                           placeholder="Enter search term..."
+                           placeholder="Search for a different patient..."
                            required>
                     <button type="submit" class="search-btn">
                         <span class="search-icon">🔍</span> Search
                     </button>
                 </div>
-
             </form>
 
-            <div class="logout-btn-container" style="margin-top: 15px; text-align: right;">
-                    <a href="{{ url_for('logout') }}" class="btn btn-outline" style="color: #e74c3c; border-color: #e74c3c;">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                     </a>
-                </div>
-
-
+            <div style="margin-left: auto;">
+                <a href="{{ url_for('logout') }}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
         </div>
 
+        <!-- Login Form - Initially hidden -->
+        <div id="mydiv" class="form-cont">
+            <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px;">New Clinical Record</h3>
+            <form method="POST" action="{{url_for('log_visit', phone=new_patient.patient_phone)}}" style="max-width: 600px; margin: 0 auto;">
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">
+                    Date <span style="font-weight: normal; color: #7f8c8d; font-size: 0.9em;">(Leave blank for today's date)</span>
+                    </label>
+                    <input type="date" name="date" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Clinical Diagnosis</label>
+                    <textarea name="diagnosis" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; min-height: 120px; font-size: 16px; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Recommended Test(s)</label>
+                     <textarea name="test" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; min-height: 120px; font-size: 16px; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Prescribed Medication</label>
+                     <textarea name="medication" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; min-height: 120px; font-size: 16px; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">
+                    Next Appointment Date</label>
+                    <input type="date" name="next_date" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                </div>
+
+                <div style="text-align: center;">
+                    <button type="submit" style="background-color: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; cursor: pointer; transition: background-color 0.3s;">
+                        Submit Record
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <script>
+        document.getElementById('medicalRecordBtn').addEventListener('click', function() {
+            const formDiv = document.getElementById('mydiv');
+            if (formDiv.style.display === 'none' || formDiv.style.display === '') {
+                formDiv.style.display = 'block';
+                this.innerHTML = '<i class="fas fa-minus"></i> Hide Medical Record Form';
+                this.style.backgroundColor = '#d32f2f';
+            } else {
+                formDiv.style.display = 'none';
+                this.innerHTML = '<i class="fas fa-file-medical"></i> Add First Medical Record';
+                this.style.backgroundColor = '#2e7d32';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -174,52 +174,64 @@
             {% endif %}
         {% endwith %}
 
-        <form method="POST" action="{{ url_for('add_patient') }}">
-            <div class="form-group">
-                <label for="name">Patient Full Name</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+        <!-- Add this at the top of your form -->
+<form method="POST" action="{{ url_for('add_patient') }}">
+    <!-- All your existing form groups, but with value attributes added -->
+    <div class="form-group">
+        <label for="name">Patient Full Name</label>
+        <input type="text" id="name" name="name" value="{{ form_data.name if form_data }}" required>
+    </div>
 
-            <div class="form-group">
-                <label>Gender</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="gender" value="male" required> Male</label>
-                    <label><input type="radio" name="gender" value="female"> Female</label>
-                </div>
-            </div>
+    <div class="form-group">
+        <label>Gender</label>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="gender" value="male"
+                    {% if form_data and form_data.gender == 'male' %}checked{% endif %} required> Male
+            </label>
+            <label>
+                <input type="radio" name="gender" value="female"
+                    {% if form_data and form_data.gender == 'female' %}checked{% endif %}> Female
+            </label>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <label for="dob">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required>
-            </div>
+    <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="dob" value="{{ form_data.dob if form_data }}" required>
+    </div>
 
-            <div class="form-group">
-                <label for="blood">Blood Group</label>
-                <input type="text" id="blood" placeholder="O+, O-, A+, B+ etc" name="blood">
-            </div>
+    <div class="form-group">
+        <label for="blood">Blood Group</label>
+        <input type="text" id="blood" placeholder="O+, O-, A+, B+ etc" name="blood"
+            value="{{ form_data.blood if form_data }}">
+    </div>
 
-            <div class="form-group">
-                <label for="patient">Primary Phone Number</label>
-                <input type="tel" id="patient" name="patient" placeholder="080XXXXXXXX" required>
-            </div>
+    <div class="form-group">
+        <label for="patient">Primary Phone Number</label>
+        <input type="tel" id="patient" name="patient" placeholder="080XXXXXXXX"
+            value="{{ form_data.patient if form_data }}" required>
+    </div>
 
-            <div class="form-group">
-                <label for="nok">Next of Kin (Full Name)</label>
-                <input type="text" id="nok" name="nok" required>
-            </div>
+    <div class="form-group">
+        <label for="nok">Next of Kin (Full Name)</label>
+        <input type="text" id="nok" name="nok" value="{{ form_data.nok if form_data }}" required>
+    </div>
 
-            <div class="form-group">
-                <label for="biw">Chief Compliant at Admission</label>
-                <textarea id="biw" name="biw" required placeholder="Describe the patient's condition when brought in"></textarea>
-            </div>
+    <div class="form-group">
+        <label for="biw">Chief Compliant at Admission</label>
+        <textarea id="biw" name="biw" required placeholder="Describe the patient's condition when brought in">
+            {{ form_data.biw if form_data }}
+        </textarea>
+    </div>
 
-            <div class="form-group">
-                <label for="bid">Admission Date (Defaults to Today if left blank)</label>
-                <input type="date" id="bid" name="bid">
-            </div>
+    <div class="form-group">
+        <label for="bid">Admission Date (Defaults to Today if left blank)</label>
+        <input type="date" id="bid" name="bid" value="{{ form_data.bid if form_data }}">
+    </div>
 
-            <button type="submit" class="btn">Save Patient Record</button>
-        </form>
+    <button type="submit" class="btn">Save Patient Record</button>
+</form>
 
     </div>
 </body>

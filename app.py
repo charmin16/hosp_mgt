@@ -82,47 +82,51 @@ def add_patient():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        name = request.form['name']
-        gender = request.form['gender']
-        age_str = request.form['dob']
-        phone = request.form['patient']
-        nok = request.form['nok']
-        biw = request.form['biw']
-        bid = request.form.get('bid')
-        blood = request.form.get('blood')
+        # Get all form data
+        form_data = {
+            'name': request.form['name'],
+            'gender': request.form['gender'],
+            'dob': request.form['dob'],
+            'patient': request.form['patient'],
+            'nok': request.form['nok'],
+            'biw': request.form['biw'],
+            'bid': request.form.get('bid'),
+            'blood': request.form.get('blood')
+        }
 
-        age_date = datetime.strptime(age_str, '%Y-%m-%d').date()
-        this_year = date.today().year
-        age = this_year - age_date.year
-
-        # bid_str = datetime.strptime(bid, '%Y-%m-%d').date()
-        bid = datetime.strptime(bid, '%Y-%m-%d').date() if bid else datetime.now().date()
-
-        new_patient = Patients(
-            name=name,
-            gender=gender,
-            age=age,
-            next_of_kin=nok,
-            patient_phone=phone,
-            blood_group=blood,
-            presenting_complaint=biw,
-            admission_date=bid
-        )
-
-        if len(new_patient.patient_phone) != 11:
+        # Validate phone number length
+        if len(form_data['patient']) != 11:
             flash('Phone Number must be 11 digits long', category='error')
-            return redirect(url_for('add_patient'))
+            return render_template('add_pat.html', form_data=form_data)
 
         try:
+            age_date = datetime.strptime(form_data['dob'], '%Y-%m-%d').date()
+            this_year = date.today().year
+            age = this_year - age_date.year
+
+            bid = datetime.strptime(form_data['bid'], '%Y-%m-%d').date() if form_data['bid'] else datetime.now().date()
+
+            new_patient = Patients(
+                name=form_data['name'],
+                gender=form_data['gender'],
+                age=age,
+                next_of_kin=form_data['nok'],
+                patient_phone=form_data['patient'],
+                blood_group=form_data['blood'],
+                presenting_complaint=form_data['biw'],
+                admission_date=bid
+            )
+
             db.session.add(new_patient)
-            db.session().commit()
+            db.session.commit()
             return render_template('add_success.html', new_patient=new_patient)
 
         except IntegrityError:
             flash('This Phone Number is already in the database', category='error')
-            return redirect(url_for('add_patient'))
+            return render_template('add_pat.html', form_data=form_data)
 
-    return render_template('add_pat.html')
+    # For GET requests or initial load
+    return render_template('add_pat.html', form_data={})
 
 
 @app.route('/search/', methods=['POST', 'GET'])

@@ -106,7 +106,14 @@
             margin: 0.5rem auto;
         }
 
+        /* Mobile-specific avatar centering */
         @media (max-width: 992px) {
+            .avatar-container {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+
             .hospital-header {
                 padding: 1rem 0;
             }
@@ -134,6 +141,7 @@
 
             h4 {
                 font-size: 1.1rem;
+                text-align: center;
             }
         }
 
@@ -153,6 +161,31 @@
 
             .login-form {
                 padding: 1rem;
+            }
+
+            /* Force center alignment for mobile */
+            .login-form h4,
+            .login-form form,
+            .login-form p {
+                text-align: center;
+            }
+
+            .input-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .input-group-text {
+                border-radius: 4px 4px 0 0 !important;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .form-control {
+                border-radius: 0 0 4px 4px !important;
+                border-left: 1px solid #ced4da !important;
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -183,12 +216,14 @@
             <div class="col-lg-5 col-md-6">
                 <div class="login-card">
                     <div class="login-form">
-                        <img src="{{url_for('static', filename='images/doctor.png')}}" class="user-avatar rounded-circle" alt="Staff">
+                        <div class="avatar-container">
+                            <img src="{{url_for('static', filename='images/doctor.png')}}" class="user-avatar rounded-circle" alt="Staff">
+                        </div>
                         <h4 class="mb-3">Staff Login</h4>
                         <form method="POST" action="{{url_for('login')}}">
                             <div class="mb-3 input-group">
                                 <span class="input-group-text"><i class="fas fa-user-md"></i></span>
-                                <input type="text" name="username" class="form-control" placeholder="Staff ID or Email" required>
+                                <input type="text" name="username" class="form-control" placeholder="Staff ID or Username" required>
                             </div>
                             <div class="mb-3 input-group">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
@@ -214,7 +249,9 @@
             <div class="col-lg-5 col-md-6">
                 <div class="login-card">
                     <div class="login-form">
-                        <img src="{{url_for('static', filename='images/woman.png')}}" class="user-avatar rounded-circle" alt="Patient">
+                        <div class="avatar-container">
+                            <img src="{{url_for('static', filename='images/woman.png')}}" class="user-avatar rounded-circle" alt="Patient">
+                        </div>
                         <h4 class="mb-3">Patient Login</h4>
                         <form method="POST" action="{{url_for('log_patient')}}">
                             <div class="mb-3 input-group">
