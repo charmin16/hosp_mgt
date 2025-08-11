@@ -8,94 +8,162 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --hospital-blue: #1a6fc9;
-            --hospital-teal: #00a3ad;
-            --success-green: #28a745;
-            --danger-red: #dc3545;
-            --light-gray: #f8f9fa;
+            --hospital-primary: #1a6fc9;
+            --hospital-secondary: #00a3ad;
+            --hospital-light: #f0f7ff;
+            --success: #28a745;
+            --danger: #dc3545;
         }
 
         body {
-            background-color: #f5f9ff;
+            background-color: var(--hospital-light);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Main Card Container */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
         }
 
         .dashboard-card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
             overflow: hidden;
-            max-width: 800px;
-            margin: 2rem auto;
         }
 
-        .header-gradient {
-            background: linear-gradient(135deg, var(--hospital-blue) 0%, var(--hospital-teal) 100%);
+        /* Header Section */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--hospital-primary) 0%, var(--hospital-secondary) 100%);
             color: white;
             padding: 2rem 1rem;
             text-align: center;
+            position: relative;
         }
 
         .user-badge {
-            background-color: #e3f2fd;
-            color: var(--hospital-blue);
+            background-color: rgba(255,255,255,0.2);
+            color: white;
             border-radius: 50px;
-            padding: 0.5rem 1rem;
-            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            display: inline-flex;
+            align-items: center;
             margin-top: 1rem;
+            font-size: 0.95rem;
         }
 
-        .search-header {
-            background-color: #e3f2fd;
+        /* Search Section */
+        .search-section {
+            background-color: white;
             padding: 1.5rem;
-            border-bottom: 1px solid #d1e3f6;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .search-title {
-            color: var(--hospital-blue);
+            color: var(--hospital-primary);
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.25rem;
         }
 
+        /* Content Area */
+        .content-area {
+            padding: 2rem;
+        }
+
+        /* Cards */
         .action-card {
-            border-left: 4px solid var(--hospital-blue);
-            transition: all 0.3s;
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--hospital-primary);
         }
 
         .action-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
         }
 
-        .search-form .form-control {
-            border-right: 0;
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--hospital-primary);
         }
 
-        .search-form .input-group-text {
-            background-color: white;
-            border-left: 0;
-        }
-
+        /* Buttons */
         .btn-hospital {
-            background-color: var(--hospital-blue);
+            background-color: var(--hospital-primary);
+            color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
             font-weight: 500;
+            transition: all 0.3s;
         }
 
         .btn-hospital:hover {
             background-color: #0d5bba;
+            transform: translateY(-2px);
         }
 
+        .btn-outline-hospital {
+            border: 1px solid var(--hospital-primary);
+            color: var(--hospital-primary);
+        }
+
+        /* Search Form */
+        .search-form {
+            position: relative;
+        }
+
+        .search-input {
+            padding-left: 2.5rem;
+            border-radius: 8px !important;
+            border: 1px solid #dee2e6;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--hospital-primary);
+            z-index: 4;
+        }
+
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .dashboard-card {
-                margin: 1rem;
+            .dashboard-header {
+                padding: 1.5rem 1rem;
             }
 
-            .header-gradient {
-                padding: 1.5rem 1rem;
+            .content-area {
+                padding: 1.5rem;
+            }
+
+            .search-title {
+                font-size: 1.1rem;
+            }
+
+            .action-icon {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .dashboard-container {
+                padding: 0.5rem;
+            }
+
+            .content-area {
+                padding: 1rem;
             }
         }
     </style>
@@ -104,7 +172,7 @@
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show text-center m-3"
+            <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show text-center m-3 rounded-3"
                  style="max-width: 800px; margin-left: auto !important; margin-right: auto !important;">
                 {{ messages[0][1] }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -112,67 +180,38 @@
         {% endif %}
     {% endwith %}
 
-    <div class="container py-4">
+    <div class="dashboard-container">
         <!-- Main Dashboard Card -->
         <div class="dashboard-card">
             <!-- Header -->
-            <div class="header-gradient">
-                <h2><i class="fas fa-hospital me-2"></i> Hospital Management</h2>
+            <div class="dashboard-header">
+                <h2 class="mb-3"><i class="fas fa-hospital me-2"></i> Prime Care Hospital</h2>
                 <div class="user-badge">
                     <i class="fas fa-user-md me-2"></i> Dr. {{ doc }}
                 </div>
             </div>
 
-            <!-- Search Header -->
-            <div class="search-header">
+            <!-- Search Section -->
+            <div class="search-section">
                 <h4 class="search-title">
-                    <i class="fas fa-arrow-circle-right"></i> Returning Patient Search
+                    <i class="fas fa-search me-2"></i> Patient Management
                 </h4>
-                <p class="mb-0 text-muted">Access existing patient records</p>
+                <p class="mb-0 text-muted">Access or create patient records</p>
             </div>
 
-            <!-- Body -->
-            <div class="p-4 p-md-5">
-                <!-- Search Forms -->
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6">
-                        <div class="card mb-3">
-                            <div class="card-header bg-white">
-                                <h5 class="mb-0"><i class="fas fa-phone-alt me-2"></i> Phone Search</h5>
-                            </div>
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Search Form -->
+                <div class="row justify-content-center mb-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm mb-4">
                             <div class="card-body">
-                                <form action="{{ url_for('search_phone') }}" method="post">
-                                    <div class="input-group search-form mb-3">
-                                        <input type="tel" name="phone" class="form-control"
-                                               placeholder="Patient Contact (Preferred)" required>
-                                        <span class="input-group-text bg-transparent">
-                                            <i class="fas fa-search"></i>
-                                        </span>
-                                    </div>
-                                    <button type="submit" class="btn btn-hospital w-100">
-                                        <i class="fas fa-search me-2"></i> Search
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                                <form action="{{ url_for('search_phone') }}" method="post" class="search-form">
 
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-white">
-                                <h5 class="mb-0"><i class="fas fa-user me-2"></i> Name Search</h5>
-                            </div>
-                            <div class="card-body">
-                                <form action="{{ url_for('search_name') }}" method="post">
-                                    <div class="input-group search-form mb-3">
-                                        <input type="text" name="name" class="form-control"
-                                               placeholder="Patient full name" required>
-                                        <span class="input-group-text bg-transparent">
-                                            <i class="fas fa-search"></i>
-                                        </span>
-                                    </div>
-                                    <button type="submit" class="btn btn-hospital w-100">
-                                        <i class="fas fa-search me-2"></i> Search
+                                    <input type="text" name="phone" class="form-control search-input py-3"
+                                           placeholder="Phone/PT-XXXX preferred (name also accepted)" required>
+                                    <button type="submit" class="btn btn-hospital w-100 mt-3">
+                                        <i class="fas fa-search me-2"></i> Search Records
                                     </button>
                                 </form>
                             </div>
@@ -183,23 +222,26 @@
                 <!-- Quick Actions -->
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <a href="{{ url_for('add_patient') }}" class="card action-card h-100 text-decoration-none">
-                            <div class="card-body text-center">
-                                <i class="fas fa-user-plus fa-3x mb-3" style="color: var(--hospital-teal);"></i>
-                                <h5>Register New Patient</h5>
-                                <p class="text-muted">Create new patient records</p>
+                        <div class="action-card">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-user-plus action-icon"></i>
+                                <h4 class="mb-3">New Patient</h4>
+                                <p class="text-muted mb-4">Register a new patient in the system</p>
+                                <a href="{{ url_for('add_patient') }}" class="btn btn-hospital w-100">
+                                    <i class="fas fa-plus-circle me-2"></i> Register
+                                </a>
                             </div>
-                        </a>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="card action-card h-100">
-                            <div class="card-body text-center">
-                                <i class="fas fa-sign-out-alt fa-3x mb-3" style="color: var(--danger-red);"></i>
-                                <h5>End Session</h5>
-                                <p class="text-muted">Securely logout from system</p>
+                        <div class="action-card">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-sign-out-alt action-icon" style="color: var(--danger);"></i>
+                                <h4 class="mb-3">Session</h4>
+                                <p class="text-muted mb-4">Securely logout from the system</p>
                                 <a href="{{ url_for('logout') }}" class="btn btn-outline-danger w-100">
-                                    Logout
+                                    <i class="fas fa-power-off me-2"></i> Logout
                                 </a>
                             </div>
                         </div>

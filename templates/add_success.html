@@ -234,6 +234,7 @@
                     <th>Patient Name</th>
                     <th>Gender</th>
                     <th>Age</th>
+                    <th>Patient_Ref</th>
                     <th>Next of Kin</th>
                     <th>Primary Diagnosis</th>
                     <th>Admission Date</th>
@@ -244,6 +245,7 @@
                     <td>{{new_patient.name}}</td>
                     <td>{{new_patient.gender}}</td>
                     <td>{{new_patient.age}}</td>
+                    <td>{{new_patient.pat_ref}}</td>
                     <td>{{new_patient.next_of_kin}}</td>
                     <td>{{new_patient.presenting_complaint}}</td>
                     <td>{{new_patient.admission_date}}</td>
@@ -259,21 +261,11 @@
                 </button>
             </div>
 
-            <form method="POST" action="{{ url_for('search_patient') }}" class="search-form-container">
-                <div class="search-type">
-                    <label>
-                        <input type="radio" name="search_type" value="phone" checked>
-                        By Phone
-                    </label>
-                    <label>
-                        <input type="radio" name="search_type" value="name">
-                        By Name
-                    </label>
-                </div>
+            <form method="POST" action="{{ url_for('search_phone') }}" class="search-form-container">
 
                 <div class="search-input-group">
                     <input type="text"
-                           name="query"
+                           name="phone"
                            class="search-input"
                            placeholder="Search for a different patient..."
                            required>

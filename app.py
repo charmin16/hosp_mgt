@@ -43,8 +43,8 @@ def register():
 
         existing = Doctors.query.filter(Doctors.staff_id == staff_id).first()
 
-        if existing and check_password_hash(existing.password, password):
-            flash(f'Staff ID {staff_id} Has already been registered. If its you then login below or re-check your id and register', category='error')
+        if existing:
+            flash(f"Staff ID {staff_id} is already registered. If it's yours, please login. Otherwise, check your details and try registering again.", category='error')
             return redirect(url_for('login'))
 
         hashed = generate_password_hash(password)
@@ -56,8 +56,8 @@ def register():
             password=hashed
         )
 
-        db.session().add(new_doc)
-        db.session().commit()
+        db.session.add(new_doc)
+        db.session.commit()
 
         flash('Registration Successful. Login Below', category='success')
         return redirect(url_for('login'))
@@ -132,21 +132,24 @@ def add_patient():
 @app.route('/search/', methods=['POST', 'GET'])
 def search_phone():
     if request.method == 'POST':
-        tel = request.form['phone']
+        tel = request.form['phone'].strip()
 
-        patient = Patients.query.filter(Patients.patient_phone == tel).first()
+        patient = Patients.query.filter(
+            or_(Patients.patient_phone == tel,
+                Patients.pat_ref == tel,
+                Patients.name.ilike(f'%{tel}%'))).first()
 
         if patient:
             visit = Visits.query.filter(Visits.patient_id == patient.id).all()
             return render_template('add_visit.html', visit=visit, patient=patient)
 
-        flash('Phone Number not Found. Please check the number and try again', category='error')
+        flash('Phone Number/Patient Reference/Name Not Found. Please Re-check Patient Details and Try Again', category='error')
         return redirect(url_for('home'))
 
     # return render_template('search_phone.html')
 
 
-@app.route('/search_name/', methods=['POST', 'GET'])
+'''@app.route('/search_name/', methods=['POST', 'GET'])
 def search_name():
     if request.method == 'POST':
         pat_name = request.form['name'].strip()
@@ -159,14 +162,14 @@ def search_name():
                 return redirect(url_for('log_visit', phone=names[0].patient_phone))
 
         flash(f'Name Does Not Exist. Try Again or Register {pat_name}', category='error')
-        return redirect(url_for('home'))
+        return redirect(url_for('home'))'''
 
 
-@app.route('/search_name/<int:id>')
+'''@app.route('/search_name/<int:id>')
 def name_details(id):
     name = Patients.query.filter(Patients.id == id).first()
     # visit = Visits.query.filter(Visits.patient_id == name.id).first()
-    return redirect(url_for('log_visit', phone=name.patient_phone))
+    return redirect(url_for('log_visit', phone=name.patient_phone))'''
 
 
 @app.route('/add_visit/<string:phone>', methods=['POST', 'GET'])
@@ -210,7 +213,7 @@ def log_visit(phone):
 
 @app.route('/search_patient', methods=['POST', 'GET'])
 def search_patient():
-    search_type = request.form.get('search_type', 'phone')
+    search_type = request.form.get('search_type')
     query = request.form.get('query', '').strip()
 
     if not query:
@@ -241,47 +244,19 @@ def core_vitals(phone):
     return render_template('core.html', pat_vitals=pat_vitals)
 
 
-@app.route('/register_patient', methods=['POST', 'GET'])
-def reg_patient():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        phone = request.form.get('phone')
-        password = request.form.get('password')
-
-        hashed = generate_password_hash(password)
-
-        if Patients.query.filter(Patients.patient_phone == phone).first():
-            new_reg = PatientLogin(
-                name=name,
-                phone=phone,
-                password=hashed
-            )
-            db.session.add(new_reg)
-            db.session.commit()
-            flash('Patient Successfully Registered. You can now sign in as patient to view your own records')
-            return redirect(url_for('login'))
-
-        flash('Credentials not in our database. Are you sure you have visited our facility before', 'error')
-        return redirect(url_for('reg_patient'))
-
-    return render_template('register_pat.html')
-
-
 @app.route('/login_patient', methods=['POST', 'GET'])
 def log_patient():
     if request.method == 'POST':
-        phone = request.form.get('pat_tel')
-        password = request.form.get('pat_password')
+        pat_ref = request.form.get('pat_ref')
 
-        existing = PatientLogin.query.filter(PatientLogin.phone == phone).first()
-        if existing and check_password_hash(existing.password, password):
-            pat_single = Patients.query.filter(Patients.patient_phone == existing.phone).first()
-            add_visit = Visits.query.filter(Visits.patient_id == pat_single.id).all()
-            flash('Login Successful', 'success')
-            return render_template('patient_page.html', patient=pat_single, visit=add_visit)
+        existing = Patients.query.filter(Patients.pat_ref == pat_ref).first()
+        if existing:
+            # pat_single = Patients.query.filter(Patients.patient_phone == existing.phone).first()
+            add_visit = Visits.query.filter(Visits.patient_id == existing.id).all()
+            return render_template('patient_page.html', patient=existing, visit=add_visit)
         else:
-            flash('Credentials Not Found', 'error')
-            return render_template('register_pat.html')
+            flash('Patience Reference Not Found', 'error')
+            return render_template('login.html')
 
     return redirect(url_for('login'))
 

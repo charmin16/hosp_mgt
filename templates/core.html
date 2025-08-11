@@ -365,20 +365,10 @@
            <div class="action-links">
                 <a href="javascript:history.back()" class="action-btn">⬅ Back to Patient</a>
 
-                <form method="POST" action="{{ url_for('search_patient') }}" class="search-form-container">
-                    <div class="search-type">
-                        <label>
-                            <input type="radio" name="search_type" value="phone" checked>
-                            Phone
-                        </label>
-                        <label>
-                            <input type="radio" name="search_type" value="name">
-                            Name
-                        </label>
-                    </div>
+                <form method="POST" action="{{ url_for('search_phone') }}" class="search-form-container">
                     <div class="search-input-group">
                         <input type="text"
-                               name="query"
+                               name="phone"
                                class="search-input"
                                placeholder="Search for a different patient..."
                                required>
