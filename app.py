@@ -65,11 +65,11 @@ def register():
     return render_template('register_doc.html')
 
 
-@app.route('/reset_db')
-def reset_db():
-    db.drop_all()
-    db.create_all()
-    return "Database tables dropped and recreated successfully!"
+# @app.route('/reset_db')
+# def reset_db():
+#    db.drop_all()
+#    db.create_all()
+#    return "Database tables dropped and recreated successfully!"
 
 
 @app.route('/home/')
