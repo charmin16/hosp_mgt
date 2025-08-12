@@ -18,6 +18,8 @@
             background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .hospital-header {
@@ -109,6 +111,12 @@
             padding: 12px 15px;
         }
 
+        /* Fix for placeholder text on desktop */
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+        }
+
         .form-control:focus {
             box-shadow: 0 0 0 0.25rem rgba(26, 111, 201, 0.2);
         }
@@ -169,6 +177,19 @@
             margin-left: 1rem;
         }
 
+        .register-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--hospital-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
             .hospital-title {
                 font-size: 1.8rem;
@@ -181,6 +202,11 @@
             .card-icon {
                 width: 70px;
                 height: 70px;
+            }
+
+            /* Ensure patient card is fully visible on mobile */
+            .patient-card {
+                margin-top: 1rem;
             }
         }
 
@@ -226,7 +252,7 @@
         </div>
     </header>
 
-    <main class="container my-4">
+    <main class="container my-4 flex-grow-1">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <!-- Staff Login Card -->
@@ -241,16 +267,29 @@
                         <form method="POST" action="{{url_for('login')}}">
                             <div class="input-group mb-4">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" name="username" class="form-control" placeholder="Staff ID or Username" required>
+                                <input type="text"
+                                       name="username"
+                                       class="form-control"
+                                       placeholder="Staff ID or Username"
+                                       required
+                                       autocomplete="username">
                             </div>
                             <div class="input-group mb-4">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                <input type="password"
+                                       name="password"
+                                       class="form-control"
+                                       placeholder="Password"
+                                       required
+                                       autocomplete="current-password">
                             </div>
                             <button class="btn btn-staff text-white" type="submit">
                                 <i class="fas fa-sign-in-alt me-2"></i> Staff Login
                             </button>
                         </form>
+                        <a href="{{url_for('register')}}" class="register-link">
+                            New staff member? Register here
+                        </a>
                     </div>
                 </div>
 
