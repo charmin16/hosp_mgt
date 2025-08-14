@@ -262,18 +262,25 @@
                             <td>{{item.attending_physician}}</td>
                         </tr>
                     {% endfor %}
-                    {% endif %}
+
                 </tbody>
             </table>
+            <div class="action-links" style="margin-top: 30px; text-align: center;">
+
+            <!-- Download PDF Button -->
+            <a href="{{ url_for('download_pdf', phone=patient.patient_phone) }}" class="btn btn-primary" style="margin-right: 10px;">
+                Download PDF
+            </a>
+
+            <!-- Disabled Send Email Button -->
+            <button class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;" disabled>
+                Send Medical Report to Email
+            </button>
         </div>
 
-
-       <div class="action-links" style="margin-top: 30px; text-align: center;">
-                Download PDF |
-
-                 Send Via Email
-
+            {% endif %}
         </div>
+
 
         <div class="logout-btn-container" style="margin-top: 15px; text-align: right;">
                 <a href="{{ url_for('logout') }}" class="btn btn-outline" style="color: #e74c3c; border-color: #e74c3c;">

@@ -1,9 +1,13 @@
-from flask import Flask, request, redirect, render_template, url_for, flash, session
+from flask import Flask, request, redirect, render_template, url_for, flash, session, Response
 from database import Patients, Visits, Doctors, PatientLogin, app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import func, desc, and_, or_
 from datetime import datetime, date
 from sqlalchemy.exc import IntegrityError
+from fpdf import FPDF
+import io
+from email.message import EmailMessage
+import smtplib
 
 app.secret_key = '123'
 
@@ -305,6 +309,56 @@ def logout():
     session.pop('doctor', None)  # Remove doctor from session
     flash('You have been logged out', category='success')
     return redirect(url_for('login'))
+
+
+@app.route('/download_pdf/<string:phone>')
+def download_pdf(phone):
+    # Fetch patient
+    patient = Patients.query.filter_by(patient_phone=phone).first_or_404()
+    visits = Visits.query.filter_by(patient_id=patient.id).order_by(Visits.date.desc()).all()
+
+    # Create PDF
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, f"Patient Record - {patient.name}", ln=True, align="C")
+
+    pdf.set_font("Arial", "", 12)
+    pdf.cell(200, 10, f"Age: {patient.age}   Blood Group: {patient.blood_group}", ln=True)
+    pdf.cell(200, 10, f"Gender: {patient.gender}", ln=True)
+    pdf.cell(200, 10, f"Next of Kin: {patient.next_of_kin}", ln=True)
+    pdf.cell(200, 10, f"Phone: {patient.patient_phone}", ln=True)
+    pdf.cell(200, 10, f"Admission Date: {patient.admission_date}", ln=True)
+
+    pdf.ln(10)  # spacing
+
+    # Table Header
+    pdf.set_font("Arial", "B", 12)
+    pdf.cell(35, 10, "Date", 1)
+    pdf.cell(45, 10, "Diagnosis", 1)
+    pdf.cell(50, 10, "Tests", 1)
+    pdf.cell(60, 10, "Medication", 1)
+    pdf.ln()
+
+    # Table Rows
+    pdf.set_font("Arial", "", 12)
+    for v in visits:
+        pdf.cell(35, 10, v.date.strftime('%Y-%m-%d'), 1)
+        pdf.cell(45, 10, v.diagnosis, 1)  # Truncate if too long
+        pdf.cell(50, 10, (v.tests or '')[:23], 1)
+        pdf.cell(60, 10, (v.medication or '')[:28], 1)
+        pdf.ln()
+
+    # Output to BytesIO
+    pdf_output = io.BytesIO()
+    pdf.output(pdf_output)
+    pdf_output.seek(0)
+
+    return Response(
+        pdf_output,
+        mimetype="application/pdf",
+        headers={"Content-Disposition": f"attachment;filename={patient.name}_record.pdf"}
+    )
 
 
 if __name__ == '__main__':
