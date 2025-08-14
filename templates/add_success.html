@@ -138,7 +138,7 @@
             font-size: 16px;
         }
 
-        /* Medical Record Button Styles */
+        /* Updated Medical Record Button Styles */
         .medical-record-btn {
             background-color: #2e7d32;
             color: white;
@@ -158,6 +158,10 @@
             background-color: #1b5e20;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .medical-record-btn.active {
+            background-color: #5c6bc0; /* Milder blue/purple instead of red */
         }
 
         /* Logout Button Styles */
@@ -197,6 +201,11 @@
             justify-content: center;
             width: 100%;
             margin-bottom: 15px;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
 
         /* Responsive adjustments */
@@ -262,7 +271,6 @@
             </div>
 
             <form method="POST" action="{{ url_for('search_phone') }}" class="search-form-container">
-
                 <div class="search-input-group">
                     <input type="text"
                            name="phone"
@@ -330,11 +338,16 @@
             if (formDiv.style.display === 'none' || formDiv.style.display === '') {
                 formDiv.style.display = 'block';
                 this.innerHTML = '<i class="fas fa-minus"></i> Hide Medical Record Form';
-                this.style.backgroundColor = '#d32f2f';
+                this.classList.add('active');
+
+                // Smooth scroll to form
+                setTimeout(() => {
+                    formDiv.scrollIntoView({ behavior: 'smooth' });
+                }, 50);
             } else {
                 formDiv.style.display = 'none';
                 this.innerHTML = '<i class="fas fa-file-medical"></i> Add First Medical Record';
-                this.style.backgroundColor = '#2e7d32';
+                this.classList.remove('active');
             }
         });
     </script>
