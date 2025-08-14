@@ -1,11 +1,12 @@
-from flask import Flask, request, redirect, render_template, url_for, flash, session, Response
+from flask import Flask, request, redirect, render_template, url_for, flash, session, Response, send_file
 from database import Patients, Visits, Doctors, PatientLogin, app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import func, desc, and_, or_
 from datetime import datetime, date
 from sqlalchemy.exc import IntegrityError
 from fpdf import FPDF
-import io
+from io import BytesIO
+
 from email.message import EmailMessage
 import smtplib
 
@@ -344,20 +345,20 @@ def download_pdf(phone):
     pdf.set_font("Arial", "", 12)
     for v in visits:
         pdf.cell(35, 10, v.date.strftime('%Y-%m-%d'), 1)
-        pdf.cell(45, 10, v.diagnosis, 1)  # Truncate if too long
+        pdf.cell(45, 10, v.diagnosis, 1)
         pdf.cell(50, 10, (v.tests or '')[:23], 1)
         pdf.cell(60, 10, (v.medication or '')[:28], 1)
         pdf.ln()
 
-    # Output to BytesIO
-    pdf_output = io.BytesIO()
-    pdf.output(pdf_output)
-    pdf_output.seek(0)
+    # Convert PDF to BytesIO
+    pdf_bytes = pdf.output(dest='S').encode('latin-1')
+    pdf_buffer = BytesIO(pdf_bytes)
 
-    return Response(
-        pdf_output,
-        mimetype="application/pdf",
-        headers={"Content-Disposition": f"attachment;filename={patient.name}_record.pdf"}
+    return send_file(
+        pdf_buffer,
+        mimetype='application/pdf',
+        as_attachment=True,
+        download_name=f"{patient.name}_record.pdf"
     )
 
 
