@@ -106,11 +106,6 @@ def add_patient():
             'blood': request.form.get('blood')
         }
 
-        # Validate phone number length
-        if len(form_data['patient']) != 11:
-            flash('Phone Number must be 11 digits long', category='error')
-            return render_template('add_pat.html', form_data=form_data)
-
         try:
             age_date = datetime.strptime(form_data['dob'], '%Y-%m-%d').date()
             this_year = date.today().year
@@ -259,7 +254,7 @@ def core_vitals(phone):
 @app.route('/login_patient', methods=['POST', 'GET'])
 def log_patient():
     if request.method == 'POST':
-        pat_ref = request.form.get('pat_ref')
+        pat_ref = request.form.get('pat_ref').strip()
 
         existing = Patients.query.filter(Patients.pat_ref == pat_ref).first()
         if existing:

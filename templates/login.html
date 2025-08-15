@@ -111,7 +111,6 @@
             padding: 12px 15px;
         }
 
-        /* Fix for placeholder text on desktop */
         .form-control::placeholder {
             color: #6c757d;
             opacity: 1;
@@ -191,36 +190,45 @@
         }
 
         @media (max-width: 768px) {
+            .hospital-header {
+                padding: 1.2rem 0; /* Reduced from 2rem */
+            }
+
             .hospital-title {
-                font-size: 1.8rem;
+                font-size: 1.6rem; /* Reduced from 2.2rem */
+                margin-bottom: 0.2rem; /* Reduced spacing */
+            }
+
+            .hospital-subtitle {
+                font-size: 0.95rem; /* Slightly smaller */
+            }
+
+            .card-header {
+                padding: 1rem; /* Reduced from 1.5rem */
+            }
+
+            .card-icon {
+                width: 60px; /* Smaller icon */
+                height: 60px;
+                margin-bottom: 0.5rem; /* Less space below icon */
+            }
+
+            .divider {
+                margin: 1rem 0; /* Reduced divider spacing */
             }
 
             .card-body {
                 padding: 1.5rem;
             }
-
-            .card-icon {
-                width: 70px;
-                height: 70px;
-            }
-
-            /* Ensure patient card is fully visible on mobile */
-            .patient-card {
-                margin-top: 1rem;
-            }
         }
 
         @media (max-width: 576px) {
             .hospital-header {
-                padding: 1.5rem 0;
+                padding: 1rem 0;
             }
 
             .hospital-title {
-                font-size: 1.6rem;
-            }
-
-            .card-header {
-                padding: 1.2rem;
+                font-size: 1.5rem;
             }
 
             .card-body {

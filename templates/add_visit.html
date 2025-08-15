@@ -75,6 +75,17 @@
             font-size: 14px;
         }
 
+        .mobile-landscape-notice {
+            display: none;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+            color: #6c757d;
+        }
+
         .card {
             background-color: var(--white);
             border-radius: 5px;
@@ -181,37 +192,41 @@
             font-size: 16px;
         }
 
-    #mydiv {
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition:
-            max-height 0.3s ease-in-out,
-            opacity 0.3s ease-in-out;
-        padding: 0 20px; /* Adjust as needed */
-    }
+        #mydiv {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition:
+                max-height 0.3s ease-in-out,
+                opacity 0.3s ease-in-out;
+            padding: 0 20px;
+        }
 
-    #mydiv.show {
-        max-height: 1000px; /* Adjust to maximum expected height */
-        opacity: 1;
-        padding: 20px; /* Match your original padding */
-    }
+        #mydiv.show {
+            max-height: 1000px;
+            opacity: 1;
+            padding: 20px;
+        }
 
-    .hidden {
-        display: none;
-    }
+        .hidden {
+            display: none;
+        }
 
-    .full-history-btn.active {
-        background-color: var(--secondary-color);
-        color: white;
-    }
+        .full-history-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        @media only screen and (max-width: 768px) and (orientation: portrait) {
+            .mobile-landscape-notice {
+                display: block;
+            }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-
-
         {% with messages = get_flashed_messages() %}
         <p style="font-size: 1.4em; text-align: center; color: blue">{{messages[0]}}</p>
         {% endwith %}
@@ -223,6 +238,11 @@
             <div class="patient-info">
                 <strong>AGE:</strong> {{patient.age}} | <strong>Blood Type:</strong> {{patient.blood_group}}
                 | <strong>Gender:</strong> {{patient.gender}} | <strong>Patient Reference:</strong> {{patient.pat_ref}}
+            </div>
+
+            <!-- Mobile landscape notice -->
+            <div class="mobile-landscape-notice">
+                <i class="fas fa-mobile-alt"></i> For better viewing, rotate your phone to landscape mode.
             </div>
 
             {% if visit|length == 0 %}
@@ -339,14 +359,14 @@
             </form>
         </div>
 
-       <div class="action-links" style="margin-top: 30px; text-align: center;">
-            <a href="{{url_for('add_patient')}}" class="btn btn-outline" style="margin: 0 10px;">
+        <div class="action-links text-center mt-4">
+            <a href="{{url_for('add_patient')}}" class="btn btn-outline mb-3 mb-md-0 mx-1">
                 <i class="fas fa-user-plus"></i> Register New Patient
-            </a>
-            <a href="{{url_for('core_vitals', phone=patient.patient_phone)}}" class="btn btn-outline" style="margin: 0 10px;">
+            </a> <br><br>
+            <a href="{{url_for('core_vitals', phone=patient.patient_phone)}}" class="btn btn-outline mb-3 mb-md-0 mx-1">
                 <i class="fas fa-id-card"></i> Patient Profile/Change Patient
-            </a>
-            <a href="{{url_for('home')}}" class="btn btn-outline" style="margin: 0 10px;">
+            </a><br><br>
+            <a href="{{url_for('home')}}" class="btn btn-outline mx-1">
                 <i class="fas fa-home"></i> Home
             </a>
         </div>
@@ -395,5 +415,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
-
-
