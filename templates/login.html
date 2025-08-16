@@ -24,35 +24,45 @@
 
         .hospital-header {
             background-color: white;
-            padding: 2rem 0;
+            padding: 1rem 0;
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
         }
 
         .hospital-title {
             color: var(--hospital-blue);
             font-weight: 700;
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
         }
 
         .hospital-subtitle {
             color: var(--dark-gray);
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.8;
+        }
+
+        .login-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1rem;
         }
 
         .access-card {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             overflow: hidden;
-            margin-bottom: 2rem;
             border: none;
             transition: transform 0.3s;
+            flex: 1 1 300px;
+            max-width: 100%;
+            min-width: 280px;
         }
 
         .access-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
 
         .staff-card {
@@ -65,20 +75,20 @@
 
         .card-header {
             background-color: white;
-            padding: 1.5rem;
+            padding: 1rem;
             text-align: center;
             border-bottom: none;
         }
 
         .card-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: rgba(26, 111, 201, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
+            margin: 0 auto 0.5rem;
             color: var(--hospital-blue);
         }
 
@@ -88,17 +98,23 @@
         }
 
         .card-body {
-            padding: 2rem;
+            padding: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
         }
 
         .input-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .input-group-text {
             background-color: #e3f2fd;
             color: var(--hospital-blue);
             border: none;
+            padding: 0.5rem 0.75rem;
         }
 
         .patient-card .input-group-text {
@@ -108,7 +124,8 @@
 
         .form-control {
             border-left: none;
-            padding: 12px 15px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
         }
 
         .form-control::placeholder {
@@ -117,126 +134,78 @@
         }
 
         .form-control:focus {
-            box-shadow: 0 0 0 0.25rem rgba(26, 111, 201, 0.2);
+            box-shadow: 0 0 0 0.2rem rgba(26, 111, 201, 0.2);
         }
 
         .patient-card .form-control:focus {
-            box-shadow: 0 0 0 0.25rem rgba(0, 163, 173, 0.2);
+            box-shadow: 0 0 0 0.2rem rgba(0, 163, 173, 0.2);
         }
 
         .btn-staff {
             background-color: var(--hospital-blue);
             border: none;
-            padding: 12px;
+            padding: 0.5rem;
             font-weight: 600;
             width: 100%;
-            transition: all 0.3s;
+            font-size: 0.9rem;
         }
 
         .btn-patient {
             background-color: var(--hospital-teal);
             border: none;
-            padding: 12px;
+            padding: 0.5rem;
             font-weight: 600;
             width: 100%;
-            transition: all 0.3s;
-        }
-
-        .btn-staff:hover, .btn-patient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .btn-staff:hover {
-            background-color: #0d5bba;
-        }
-
-        .btn-patient:hover {
-            background-color: #008c96;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 2rem 0;
-            color: #6c757d;
-        }
-
-        .divider::before, .divider::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .divider::before {
-            margin-right: 1rem;
-        }
-
-        .divider::after {
-            margin-left: 1rem;
+            font-size: 0.9rem;
         }
 
         .register-link {
             display: block;
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 0.8rem;
             color: var(--hospital-blue);
             text-decoration: none;
-            font-weight: 500;
+            font-size: 0.85rem;
         }
 
         .register-link:hover {
             text-decoration: underline;
         }
 
-        @media (max-width: 768px) {
+        footer {
+            margin-top: auto;
+            padding: 1rem 0;
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 768px) {
+            .login-container {
+                flex-wrap: nowrap;
+                gap: 2rem;
+            }
+
             .hospital-header {
-                padding: 1.2rem 0; /* Reduced from 2rem */
+                padding: 1.5rem 0;
             }
 
             .hospital-title {
-                font-size: 1.6rem; /* Reduced from 2.2rem */
-                margin-bottom: 0.2rem; /* Reduced spacing */
-            }
-
-            .hospital-subtitle {
-                font-size: 0.95rem; /* Slightly smaller */
+                font-size: 2rem;
             }
 
             .card-header {
-                padding: 1rem; /* Reduced from 1.5rem */
-            }
-
-            .card-icon {
-                width: 60px; /* Smaller icon */
-                height: 60px;
-                margin-bottom: 0.5rem; /* Less space below icon */
-            }
-
-            .divider {
-                margin: 1rem 0; /* Reduced divider spacing */
-            }
-
-            .card-body {
                 padding: 1.5rem;
             }
-        }
 
-        @media (max-width: 576px) {
-            .hospital-header {
-                padding: 1rem 0;
-            }
-
-            .hospital-title {
-                font-size: 1.5rem;
-            }
-
-            .card-body {
-                padding: 1.2rem;
+            .card-title {
+                font-size: 1.4rem;
             }
 
             .form-control {
-                padding: 10px 12px;
+                padding: 0.75rem 1rem;
+            }
+
+            .btn-staff, .btn-patient {
+                padding: 0.75rem;
             }
         }
     </style>
@@ -244,8 +213,8 @@
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <div class="container mt-3">
-                <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show text-center">
+            <div class="container mt-2">
+                <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show text-center py-2">
                     {{ messages[0][1] }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -260,84 +229,78 @@
         </div>
     </header>
 
-    <main class="container my-4 flex-grow-1">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <!-- Staff Login Card -->
-                <div class="access-card staff-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-user-md fa-2x"></i>
-                        </div>
-                        <h3>Medical Staff Access</h3>
+    <main class="container my-3 flex-grow-1">
+        <div class="login-container">
+            <!-- Staff Login Card -->
+            <div class="access-card staff-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-user-md"></i>
                     </div>
-                    <div class="card-body">
-                        <form method="POST" action="{{url_for('login')}}">
-                            <div class="input-group mb-4">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text"
-                                       name="username"
-                                       class="form-control"
-                                       placeholder="Staff ID or Username"
-                                       required
-                                       autocomplete="username">
-                            </div>
-                            <div class="input-group mb-4">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password"
-                                       name="password"
-                                       class="form-control"
-                                       placeholder="Password"
-                                       required
-                                       autocomplete="current-password">
-                            </div>
-                            <button class="btn btn-staff text-white" type="submit">
-                                <i class="fas fa-sign-in-alt me-2"></i> Staff Login
-                            </button>
-                        </form>
-                        <a href="{{url_for('register')}}" class="register-link">
-                            New staff member? Register here
-                        </a>
-                    </div>
+                    <h3 class="card-title">Staff Login</h3>
                 </div>
-
-                <div class="divider">
-                    <span>PATIENT ACCESS</span>
-                </div>
-
-                <!-- Patient Search Card -->
-                <div class="access-card patient-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-user-injured fa-2x"></i>
+                <div class="card-body">
+                    <form method="POST" action="{{url_for('login')}}">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text"
+                                   name="username"
+                                   class="form-control"
+                                   placeholder="Staff ID"
+                                   required
+                                   autocomplete="username">
                         </div>
-                        <h3>Patient Records</h3>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="Password"
+                                   required
+                                   autocomplete="current-password">
+                        </div>
+                        <button class="btn btn-staff text-white mb-2" type="submit">
+                            <i class="fas fa-sign-in-alt me-2"></i> Login
+                        </button>
+                    </form>
+                    <a href="{{url_for('register')}}" class="register-link">
+                        New staff? Register here
+                    </a>
+                </div>
+            </div>
+
+            <!-- Patient Login Card -->
+            <div class="access-card patient-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-user-injured"></i>
                     </div>
-                    <div class="card-body">
-                        <form method="POST" action="{{url_for('log_patient')}}">
-                            <div class="input-group mb-4">
-                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                                <input type="text"
-                                       name="pat_ref"
-                                       class="form-control"
-                                       placeholder="Patient Reference (PT-XXXX)"
-                                       required
-                                       pattern="PT-[0-9]{4}"
-                                       title="Please enter a valid patient reference (e.g. PT-1234)">
-                            </div>
-                            <button class="btn btn-patient text-white" type="submit">
-                                <i class="fas fa-search me-2"></i> Retrieve Records
-                            </button>
-                        </form>
-                    </div>
+                    <h3 class="card-title">Patient Access</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{url_for('log_patient')}}">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            <input type="text"
+                                   name="pat_ref"
+                                   class="form-control"
+                                   placeholder="Patient ID (PT-XXXX)"
+                                   required
+                                   pattern="PT-[0-9]{4}"
+                                   title="Format: PT-1234">
+                        </div>
+                        <button class="btn btn-patient text-white" type="submit">
+                            <i class="fas fa-search me-2"></i> View Records
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="text-center py-4 text-muted">
+    <footer class="text-center text-muted">
         <div class="container">
-            <p class="mb-0">&copy; 2023 Prime Care Hospital. All rights reserved.</p>
+            <p class="mb-0">&copy; 2023 Prime Care Hospital</p>
         </div>
     </footer>
 
