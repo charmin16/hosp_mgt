@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Access Portal</title>
+    <title>Secure Access | Prime Care Hospital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -150,6 +150,20 @@
             transform: translateY(-2px);
         }
 
+        .register-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--staff-blue);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
         .footer {
             margin-top: auto;
             padding: 1.5rem;
@@ -157,21 +171,37 @@
             color: #6c757d;
             font-size: 0.9rem;
         }
+
+        .alert {
+            max-width: 800px;
+            margin: 1rem auto;
+        }
     </style>
 </head>
 <body>
     <div class="overlay"></div>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show text-center">
+                    {{ messages[0][1] }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <header class="hospital-header">
         <div class="container">
-            <h1 class="hospital-title">PrimeCare Hospital</h1>
+            <h1 class="hospital-title">Prime Care Hospital</h1>
             <p class="hospital-subtitle">Secure Medical Access Portal</p>
         </div>
     </header>
 
     <main class="container my-3 flex-grow-1">
         <div class="login-grid">
-            <!-- Staff Login -->
+            <!-- Staff Login Card -->
             <div class="login-card staff-card">
                 <div class="card-header">
                     <div class="card-icon staff-icon">
@@ -180,21 +210,34 @@
                     <h3>Medical Staff</h3>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form method="POST" action="{{url_for('login')}}">
                         <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Staff ID" required>
+                            <input type="text"
+                                   name="username"
+                                   class="form-control"
+                                   placeholder="Staff ID or Username"
+                                   required
+                                   autocomplete="username">
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" placeholder="Password" required>
+                            <input type="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="Password"
+                                   required
+                                   autocomplete="current-password">
                         </div>
                         <button type="submit" class="btn btn-staff">
-                            <i class="fas fa-sign-in-alt me-2"></i> Login
+                            <i class="fas fa-sign-in-alt me-2"></i> Staff Login
                         </button>
                     </form>
+                    <a href="{{url_for('register')}}" class="register-link">
+                        New staff member? Register here
+                    </a>
                 </div>
             </div>
 
-            <!-- Patient Login -->
+            <!-- Patient Login Card -->
             <div class="login-card patient-card">
                 <div class="card-header">
                     <div class="card-icon patient-icon">
@@ -203,12 +246,18 @@
                     <h3>Patient Portal</h3>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form method="POST" action="{{url_for('log_patient')}}">
                         <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Patient ID (PT-XXXX)" required>
+                            <input type="text"
+                                   name="pat_ref"
+                                   class="form-control"
+                                   placeholder="Patient Reference (PT-XXXX)"
+                                   required
+                                   pattern="PT-[0-9]{4}"
+                                   title="Please enter a valid patient reference (e.g. PT-1234)">
                         </div>
                         <button type="submit" class="btn btn-patient">
-                            <i class="fas fa-search me-2"></i> Access Records
+                            <i class="fas fa-search me-2"></i> Retrieve Records
                         </button>
                     </form>
                 </div>
@@ -218,7 +267,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2023 PrimeCare Hospital. All rights reserved.</p>
+            <p>&copy; 2023 Prime Care Hospital. All rights reserved.</p>
         </div>
     </footer>
 
